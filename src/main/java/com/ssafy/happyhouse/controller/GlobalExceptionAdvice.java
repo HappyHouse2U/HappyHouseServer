@@ -1,59 +1,68 @@
 package com.ssafy.happyhouse.controller;
 
+import com.ssafy.happyhouse.dto.ErrorDto;
+import com.ssafy.happyhouse.dto.ErrorResponseDto;
 import com.ssafy.happyhouse.exception.ApplicationException;
 import com.ssafy.happyhouse.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionAdvice {
-    private final ModelAndView mav = new ModelAndView("error");
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleNoHandlerFoundException(NoHandlerFoundException e) {
-        e.printStackTrace();
-        ErrorCode errorCode = ErrorCode.NOT_FOUND;
-        mav.addObject("errorCode", errorCode);
-        mav.addObject("errorMsg", errorCode.getMessage());
-        return mav;
+    public ResponseEntity<ErrorResponseDto> handleNoHandlerFoundException(NoHandlerFoundException e) {
+        log.error("MethodArgumentNotValidException: {}", e.getMessage());
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        ErrorDto errorDto = new ErrorDto(errorCode.getHttpStatus(), errorCode.getMessage());
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.from(errorDto));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ModelAndView handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        e.printStackTrace();
+    public ResponseEntity<ErrorResponseDto> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.error("MethodArgumentTypeMismatchException: {}", e.getMessage());
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
-        mav.addObject("errorCode", errorCode);
-        mav.addObject("errorMsg", errorCode.getMessage());
-        return mav;
+        ErrorDto errorDto = new ErrorDto(errorCode.getHttpStatus(), errorCode.getMessage());
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.from(errorDto));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ModelAndView handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        e.printStackTrace();
+    public ResponseEntity<ErrorResponseDto> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        log.error("handleHttpRequestMethodNotSupportedException: {}", e.getMessage());
         ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
-        mav.addObject("errorCode", errorCode);
-        mav.addObject("errorMsg", errorCode.getMessage());
-        return mav;
+        ErrorDto errorDto = new ErrorDto(errorCode.getHttpStatus(), errorCode.getMessage());
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.from(errorDto));
     }
 
     @ExceptionHandler(ApplicationException.class)
-    public ModelAndView handleCustomException(ApplicationException e) {
-        e.printStackTrace();
-        mav.addObject("errorCode", e.getErrorCode());
-        mav.addObject("errorMsg", e.getErrorCode().getMessage());
-        return mav;
+    public ResponseEntity<ErrorResponseDto> handleCustomException(ApplicationException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("handleCustomException: {}", errorCode.getHttpStatus() + " " + errorCode.getMessage());
+        ErrorDto errorDto = new ErrorDto(errorCode.getHttpStatus(), errorCode.getMessage());
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.from(errorDto));
     }
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleException(Exception e) {
-        e.printStackTrace();
+    public ResponseEntity<ErrorResponseDto> handleException(Exception e) {
+        log.error("handleException", e);
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        mav.addObject("errorCode", errorCode);
-        mav.addObject("errorMsg", errorCode.getMessage());
-        return mav;
+        ErrorDto errorDto = new ErrorDto(errorCode.getHttpStatus(), errorCode.getMessage());
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.from(errorDto));
     }
 }
