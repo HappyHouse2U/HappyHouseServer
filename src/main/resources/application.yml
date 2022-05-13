@@ -1,0 +1,35 @@
+server:
+  port: 8070
+
+spring:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  mvc:
+    view:
+      prefix: /WEB-INF/
+      suffix: .jsp
+    throw-exception-if-no-handler-found: true
+    dispatch-options-request: false
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./h2db
+    username: test
+    password: test
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: true
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+        enable_lazy_load_no_trans: true
+    hibernate:
+      ddl-auto: create
+
