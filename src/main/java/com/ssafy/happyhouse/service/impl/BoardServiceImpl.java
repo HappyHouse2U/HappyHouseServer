@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.service.impl;
 
 import com.ssafy.happyhouse.domain.Board;
+import com.ssafy.happyhouse.dto.KeyType;
 import com.ssafy.happyhouse.exception.BoardNotFoundException;
 import com.ssafy.happyhouse.exception.MemberNotFoundException;
 import com.ssafy.happyhouse.repository.BoardRepository;
@@ -24,11 +25,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getBoardList(String key, String word) {
+    public List<Board> getBoardList(KeyType key, String word) {
         if (word == null) return boardRepository.findAll();
         else {
-            if (key.equals("title")) return boardRepository.findByTitle(word);
-            else if (key.equals("writer")) return boardRepository.findByWriter(word);
+            if (key.equals(KeyType.TITLE)) return boardRepository.findByTitle(word);
+            else if (key.equals(KeyType.WRITER)) return boardRepository.findByWriter(word);
             else return boardRepository.findByNo(Long.parseLong(word));
         }
     }

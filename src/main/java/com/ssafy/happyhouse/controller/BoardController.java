@@ -3,6 +3,7 @@ package com.ssafy.happyhouse.controller;
 import com.ssafy.happyhouse.domain.Board;
 import com.ssafy.happyhouse.dto.BoardModifyRequestDto;
 import com.ssafy.happyhouse.dto.BoardRegistRequestDto;
+import com.ssafy.happyhouse.dto.KeyType;
 import com.ssafy.happyhouse.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +22,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public ResponseEntity<List<Board>> getBoardList(@RequestParam String key, @RequestParam String word) {
+    public ResponseEntity<List<Board>> getBoardList(@RequestParam KeyType key, @RequestParam String word) {
         List<Board> boardList;
         if (word == null) boardList = boardService.getBoardList();
         else boardList = boardService.getBoardList(key, word);
