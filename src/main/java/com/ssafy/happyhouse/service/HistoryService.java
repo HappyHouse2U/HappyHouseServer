@@ -11,5 +11,5 @@ public interface HistoryService {
 
     List<History> getHistoryListByAptName(String aptName);
 
-    History getHistory(Long no);
+    History getHistory(Long id);
 }

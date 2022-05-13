@@ -15,7 +15,7 @@ import javax.persistence.Id;
 public class History {
     @Id
     @GeneratedValue
-    Long no;
+    Long id;
 
     String aptName;
 

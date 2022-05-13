@@ -36,7 +36,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public History getHistory(Long no) {
-        return historyRepository.findById(no).orElseThrow(HistoryNotFoundException::new);
+    public History getHistory(Long id) {
+        return historyRepository.findById(id).orElseThrow(HistoryNotFoundException::new);
     }
 }
