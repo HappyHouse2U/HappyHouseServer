@@ -12,10 +12,10 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class History {
+public class History implements Comparable<History>{
     @Id
     @GeneratedValue
-    Long id;
+    Long no;
 
     String aptName;
 
@@ -30,4 +30,21 @@ public class History {
     int year;
 
     int month;
+
+    String roadName;
+
+    int roadMainCode;
+
+    int roadSubCode;
+
+    double lat;
+
+    double lng;
+
+    int distFromSubway;
+
+    @Override
+    public int compareTo(History o) {
+        return this.distFromSubway-o.distFromSubway;
+    }
 }

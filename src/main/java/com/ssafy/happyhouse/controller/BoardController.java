@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -21,9 +20,11 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @GetMapping("/list.do")
-    public String getBoardList(Model model) {
-        List<Board> boardList = boardService.getBoardList();
+    @RequestMapping("/list.do")
+    public String getBoardList(String key, String word, Model model) {
+        List<Board> boardList;
+        if(word == null) boardList = boardService.getBoardList();
+        else boardList = boardService.getBoardList(key, word);
         model.addAttribute("boards", boardList);
         return "/board/notice";
     }
@@ -34,7 +35,7 @@ public class BoardController {
         board.setTitle(title);
         board.setContent(content);
         board.setDate(LocalDate.now().toString());
-        board.setMember_id((String) httpSession.getAttribute("id"));
+        board.setWriter((String)httpSession.getAttribute("id"));
         boardService.registBoard(board);
         return "redirect:/board/list.do";
     }
@@ -63,9 +64,9 @@ public class BoardController {
         board.setTitle(title);
         board.setContent(content);
         board.setDate(LocalDate.now().toString());
-        board.setMember_id((String) httpSession.getAttribute("id"));
+        board.setWriter((String)httpSession.getAttribute("id"));
         boardService.modifyBoard(board);
-        return "redirect:/board/select.do?no=" + no;
+        return "redirect:/board/select.do?no="+no;
     }
 
     @GetMapping("delete.do")

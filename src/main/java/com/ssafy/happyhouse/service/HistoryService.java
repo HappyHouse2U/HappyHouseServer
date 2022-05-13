@@ -2,6 +2,7 @@ package com.ssafy.happyhouse.service;
 
 import com.ssafy.happyhouse.domain.History;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 public interface HistoryService {
@@ -11,5 +12,11 @@ public interface HistoryService {
 
     List<History> getHistoryListByAptName(String aptName);
 
-    History getHistory(Long id);
+    History getHistory(Long no);
+
+    int getDistToSubWay(double lat, double lng) throws MalformedURLException;
+
+    void getCoordinates(History history, int count);
+
+    void sortList(List<History> list);
 }

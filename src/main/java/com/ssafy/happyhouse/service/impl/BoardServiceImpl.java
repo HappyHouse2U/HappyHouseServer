@@ -21,6 +21,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public List<Board> getBoardList(String key, String word) {
+        if(word == null) return boardRepository.findAll();
+        else {
+            if(key.equals("title")) return boardRepository.findByTitle(word);
+            else if(key.equals("writer")) return boardRepository.findByWriter(word);
+            else return boardRepository.findByNo(Long.parseLong(word));
+        }
+    }
+
+    @Override
     public void registBoard(Board board) {
         boardRepository.save(board);
     }
@@ -33,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board modifyBoard(Board board) {
         Board old = getBoard(board.getNo());
-        if (old != null) {
+        if(old != null){
             old.setTitle(board.getTitle());
             old.setContent(board.getContent());
             old.setDate(LocalDate.now().toString());

@@ -1,10 +1,9 @@
 package com.ssafy.happyhouse.controller;
 
-import com.ssafy.happyhouse.util.parse.ParseUtil;
+import com.example.happyhouse5.util.parse.ParseUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.SQLException;
@@ -13,10 +12,14 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class HomeController {
     private final ParseUtil parseUtil;
+    @RequestMapping("/")
+    public String index(){
+        return "index";
+    }
 
-    @RequestMapping("/api/save")
-    public ResponseEntity<String> saveData() throws SQLException {
+    @RequestMapping("/save")
+    public String saveData() throws SQLException {
         parseUtil.run();
-        return new ResponseEntity<>("저장 성공", HttpStatus.OK);
+        return "save";
     }
 }

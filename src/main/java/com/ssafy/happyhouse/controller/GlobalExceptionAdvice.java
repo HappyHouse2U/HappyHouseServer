@@ -1,7 +1,7 @@
 package com.ssafy.happyhouse.controller;
 
-import com.ssafy.happyhouse.exception.ApplicationException;
-import com.ssafy.happyhouse.exception.ErrorCode;
+import com.example.happyhouse5.exception.ApplicationException;
+import com.example.happyhouse5.exception.ErrorCode;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

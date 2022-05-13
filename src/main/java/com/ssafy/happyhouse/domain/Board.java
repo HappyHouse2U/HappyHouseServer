@@ -25,6 +25,6 @@ public class Board {
 
     String content;
 
-    String member_id;
+    String writer;
 
 }
