@@ -1,12 +1,14 @@
 package com.ssafy.happyhouse.service.impl;
 
 import com.ssafy.happyhouse.domain.Board;
+import com.ssafy.happyhouse.exception.BoardNotFoundException;
+import com.ssafy.happyhouse.exception.MemberNotFoundException;
 import com.ssafy.happyhouse.repository.BoardRepository;
 import com.ssafy.happyhouse.service.BoardService;
+import com.ssafy.happyhouse.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -14,6 +16,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     @Override
     public List<Board> getBoardList() {
@@ -22,33 +25,31 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getBoardList(String key, String word) {
-        if(word == null) return boardRepository.findAll();
+        if (word == null) return boardRepository.findAll();
         else {
-            if(key.equals("title")) return boardRepository.findByTitle(word);
-            else if(key.equals("writer")) return boardRepository.findByWriter(word);
+            if (key.equals("title")) return boardRepository.findByTitle(word);
+            else if (key.equals("writer")) return boardRepository.findByWriter(word);
             else return boardRepository.findByNo(Long.parseLong(word));
         }
     }
 
     @Override
-    public void registBoard(Board board) {
+    public Board registBoard(Board board) {
+        if (!memberService.idCheck(board.getWriter())) throw new MemberNotFoundException();
         boardRepository.save(board);
+        return board;
     }
 
     @Override
     public Board getBoard(Long no) {
-        return boardRepository.getById(no);
+        return boardRepository.findById(no).orElseThrow(BoardNotFoundException::new);
     }
 
     @Override
-    public Board modifyBoard(Board board) {
-        Board old = getBoard(board.getNo());
-        if(old != null){
-            old.setTitle(board.getTitle());
-            old.setContent(board.getContent());
-            old.setDate(LocalDate.now().toString());
-            boardRepository.save(old);
-        }
+    public Board modifyBoard(Long no, String title, String content) {
+        Board old = getBoard(no);
+        Board.modify(old, title, content);
+        boardRepository.save(old);
         return old;
     }
 

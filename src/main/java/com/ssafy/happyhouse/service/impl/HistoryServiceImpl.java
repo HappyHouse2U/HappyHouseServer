@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -41,17 +42,25 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     @Transactional(readOnly = true)
     public List<History> getHistoryListByAptName(String aptName) {
-        return historyRepository.findByAptNameContains(aptName);
+        List<History> historyList = historyRepository.findByAptNameContains(aptName);
+        for (History history : historyList) {
+            if (history.getDistFromSubway() <= 0)
+                getCoordinates(history, 0);
+        }
+        sortList(historyList);
+        return historyList;
     }
 
     @Override
     @Transactional(readOnly = true)
     public History getHistory(Long no) {
-        return historyRepository.findById(no).orElseThrow(HistoryNotFoundException::new);
+        History history = historyRepository.findById(no).orElseThrow(HistoryNotFoundException::new);
+        getCoordinates(history, 0);
+        return history;
     }
 
     @Override
-    public int getDistToSubWay(double x,double y) {
+    public int getDistToSubWay(double x, double y) {
         try {
             String apiURL = "https://dapi.kakao.com/v2/local/search/category.json?category_group_code=SW8&x=" + x + "&y=" + y + "&radius=20000&sort=distance";
             URL url = new URL(apiURL);
@@ -92,7 +101,7 @@ public class HistoryServiceImpl implements HistoryService {
         String address = getAddressName(history.getAddressId());
         try {
             String query = address + " " + history.getRoadName();
-            if(count == 0) {
+            if (count == 0) {
                 query += " " + history.getAptName();
             }
             query += " " + history.getRoadMainCode() + "-" + history.getRoadSubCode();
@@ -102,7 +111,7 @@ public class HistoryServiceImpl implements HistoryService {
             String apiURL = "https://dapi.kakao.com/v2/local/search/address.json?analyze_type=similar&page=1&size=10&" +
                     "query=" + query;
             URL url = new URL(apiURL);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestProperty("Authorization", "KakaoAK " + appkey);
             con.setRequestMethod("GET");
@@ -110,7 +119,7 @@ public class HistoryServiceImpl implements HistoryService {
             int responseCode = con.getResponseCode();
             BufferedReader br;
 
-            if(responseCode == 200) {
+            if (responseCode == 200) {
                 br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             } else {
                 br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -128,20 +137,20 @@ public class HistoryServiceImpl implements HistoryService {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response.toString());
             JSONArray array = (JSONArray) jsonObject.get("documents");
             double x = 0, y = 0;
-            if(array.size() != 0){
-                JSONObject objectDoc = (JSONObject)array.get(0);
+            if (array.size() != 0) {
+                JSONObject objectDoc = (JSONObject) array.get(0);
                 x = Double.parseDouble(objectDoc.get("x").toString());
                 y = Double.parseDouble(objectDoc.get("y").toString());
             } else {
-                if(count < 2) {
-                    getCoordinates(history, count+1);
+                if (count < 2) {
+                    getCoordinates(history, count + 1);
                     return;
                 }
             }
 
             history.setLat(x);
             history.setLng(y);
-            history.setDistFromSubway(getDistToSubWay(x,y));
+            history.setDistFromSubway(getDistToSubWay(x, y));
             historyRepository.save(history);
         } catch (Exception e) {
             System.out.println(e);
@@ -149,10 +158,10 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public String getAddressName(String address) {
-        try{
+        try {
             String apiURL = "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=" + address;
             URL url = new URL(apiURL);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod("GET");
             con.setRequestProperty("Content-Type", "application/json;UTF-8");
@@ -160,7 +169,7 @@ public class HistoryServiceImpl implements HistoryService {
             int responseCode = con.getResponseCode();
             BufferedReader br;
 
-            if(responseCode == 200) {
+            if (responseCode == 200) {
                 br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             } else {
                 br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -186,7 +195,7 @@ public class HistoryServiceImpl implements HistoryService {
         return "";
     }
 
-    public void sortList(List<History> list){
+    public void sortList(List<History> list) {
         Collections.sort(list);
     }
 }

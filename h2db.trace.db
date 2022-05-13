@@ -1,0 +1,33 @@
+2022-05-13 23:27:54 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES(""dddd"", ""dddd"", ""dd"", ""dd"", ""dd"", ""dd"")
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values("dddd", "dddd", "dd", "dd", "dd", "dd")
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:28:08 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES(""dddd"", ""dddd"", ""dddd"", ""dddd"", ""dddd"", ""dddd"")
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values("dddd", "dddd", "dddd", "dddd", "dddd", "dddd")
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:28:58 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:28:59 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:29:11 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:29:14 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO MEMBER VALUES('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT[*] * FROM MEMBER"; SQL statement:
+insert into MEMBER values('dddd', 'dddd', 'dddd', 'dddd', 'dddd', 'dddd')
+SELECT * FROM MEMBER [42000-200]
+2022-05-13 23:52:56 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "BOARD[*]"; expected "BACKUP, BEGIN"; SQL statement:
+BOARD [42001-200]

@@ -9,11 +9,11 @@ public interface BoardService {
 
     List<Board> getBoardList(String key, String word);
 
-    void registBoard(Board board);
+    Board registBoard(Board board);
 
     Board getBoard(Long no);
 
-    Board modifyBoard(Board board);
+    Board modifyBoard(Long no, String title, String content);
 
     void deleteBoard(Long no);
 }
